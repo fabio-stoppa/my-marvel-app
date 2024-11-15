@@ -1,4 +1,3 @@
-import "./App.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import CharacterSearch from "./components/CharacterSearch";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

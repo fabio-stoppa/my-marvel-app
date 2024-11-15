@@ -5,7 +5,7 @@ import useSWRInfinite from "swr/infinite";
 
 const publicKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY;
 const privateKey = import.meta.env.VITE_MARVEL_PRIVATE_KEY;
-export const PAGE_SIZE = 20;
+export const PAGE_SIZE = 24;
 
 const generateAuthParams = () => {
   const timestamp = new Date().getTime().toString();
@@ -29,15 +29,17 @@ export const fetchCharacters = async ({
   characters: Character[];
   total: number;
 }> => {
+  let convertedNameStartsWith = nameStartsWith;
+  if (nameStartsWith === "") convertedNameStartsWith = undefined;
   const authParams = generateAuthParams();
   const params = {
     ...authParams,
     offset,
     limit,
-    nameStartsWith,
+    nameStartsWith: convertedNameStartsWith,
   };
 
-  console.log(`Fetching characters with offset: ${offset}, limit: ${limit}`); // Debug log
+  console.log(`Fetching characters with offset: ${offset}, limit: ${limit}`);
 
   try {
     const response = await marvelApi.get<MarvelResponse>("characters", {
@@ -73,12 +75,16 @@ export const useCharacters = (nameStartsWith?: string) => {
       if (previousPageData && !previousPageData.characters.length) return null;
 
       return {
-        offset: index * PAGE_SIZE * 2,
-        limit: PAGE_SIZE * 2,
+        offset: index * PAGE_SIZE,
+        limit: PAGE_SIZE,
         nameStartsWith,
       };
     },
     fetchCharacters,
-    { revalidateOnFocus: false, revalidateFirstPage: false }
+    {
+      revalidateOnFocus: false,
+      revalidateFirstPage: false,
+      keepPreviousData: true,
+    }
   );
 };
