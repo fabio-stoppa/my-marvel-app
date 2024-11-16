@@ -1,13 +1,13 @@
-import { useCharacterById } from "@/hooks/useCharacterById";
+import { useEventById } from "@/hooks/useEventById"; // Use the event hook
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Lightbox from "./ui/Lightbox";
 import ShieldSpinner from "./ui/Spinner";
 
-const CharacterDetail = () => {
+const EventDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data, loading } = useCharacterById(id);
+  const { data, loading } = useEventById(id); // Fetch event data using the event hook
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -36,52 +36,50 @@ const CharacterDetail = () => {
   return (
     <>
       <div
-        onClick={() => navigate("/characters")}
+        onClick={() => navigate("/events")}
         className="fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm transition-all flex justify-center items-center z-50 md:p-6"
       >
         <div
           onClick={(e) => e.stopPropagation()}
           className="bg-gray-900 rounded-lg overflow-hidden max-w-[1280px] w-full max-h-[1000px] h-full shadow-md relative flex md:flex-row flex-col border"
         >
-          {!data?.character || loading ? (
+          {!data?.event || loading ? (
             <div className="flex justify-center items-center w-full h-full">
               <ShieldSpinner />
             </div>
           ) : (
             <>
               <button
-                onClick={() => navigate("/characters")}
+                onClick={() => navigate("/events")}
                 className="absolute top-10 right-10 text-3xl text-white z-10"
               >
                 &times;
               </button>
               <div className="md:w-[30%] w-full md:h-full h-[15%] relative">
                 <img
-                  src={`${data.character.thumbnail.path}.${data.character.thumbnail.extension}`}
-                  alt={data.character.name}
+                  src={`${data.event.thumbnail.path}.${data.event.thumbnail.extension}`}
+                  alt={data.event.title}
                   className="object-cover w-full h-full opacity-5"
                 />
                 <img
-                  src={`${data.character.thumbnail.path}.${data.character.thumbnail.extension}`}
-                  alt={data.character.name}
+                  src={`${data.event.thumbnail.path}.${data.event.thumbnail.extension}`}
+                  alt={data.event.title}
                   className="aspect-square object-cover object-top rounded-full md:w-[80%] w-48 left-1/2 -translate-x-1/2 md:top-6 top-2 absolute bg-gray-950"
                 />
               </div>
 
               <div className="p-6 md:pt-6 pt-24 flex flex-col gap-4 overflow-auto w-full">
-                <h2 className="text-4xl font-bold mt-4">
-                  {data.character.name}
-                </h2>
+                <h2 className="text-4xl font-bold mt-4">{data.event.title}</h2>
                 <p className="mt-2 text-gray-600 max-w-[800px]">
-                  {data.character.description || "No description available."}
+                  {data.event.description || "No description available."}
                 </p>
                 <div className="flex flex-col gap-4 justify-between mt-auto">
                   <div>
                     <h3 className="font-semibold mb-2">
-                      Comics ({data.character.comics.available}):
+                      Comics ({data.event.comics.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
-                      {data.charComics.map((comic) => (
+                      {data.eventComics.map((comic) => (
                         <div key={comic?.id} className="w-[100px]">
                           <img
                             src={
@@ -109,30 +107,30 @@ const CharacterDetail = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">
-                      Events ({data.character.comics.available}):
+                      Characters ({data.event.characters.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
-                      {data.charSeries.map((event) => (
-                        <div key={event?.id} className="w-[100px]">
+                      {data.eventCharacters.map((character) => (
+                        <div key={character?.id} className="w-[100px]">
                           <img
                             src={
-                              event?.thumbnail.path +
+                              character?.thumbnail.path +
                               "." +
-                              event?.thumbnail.extension
+                              character?.thumbnail.extension
                             }
                             className="object-cover w-[100px] h-[154px] rounded-lg border cursor-pointer transition-all hover:scale-105"
                             loading="lazy"
-                            alt={event.title}
+                            alt={character.name}
                             onClick={() =>
                               openLightbox(
-                                event?.thumbnail.path +
+                                character?.thumbnail.path +
                                   "." +
-                                  event?.thumbnail.extension
+                                  character?.thumbnail.extension
                               )
                             }
                           />
                           <span className="line-clamp-1 text-xs">
-                            {event?.title}
+                            {character?.name}
                           </span>
                         </div>
                       ))}
@@ -140,10 +138,10 @@ const CharacterDetail = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">
-                      Series ({data.character.comics.available}):
+                      Series ({data.event.series.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
-                      {data.charSeries.map((series) => (
+                      {data.eventSeries.map((series) => (
                         <div key={series?.id} className="w-[100px]">
                           <img
                             src={
@@ -171,30 +169,30 @@ const CharacterDetail = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">
-                      Stories ({data.character.comics.available}):
+                      Stories ({data.event.stories.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
-                      {data.charStories.map((stories) => (
-                        <div key={stories?.id} className="w-[100px]">
+                      {data.eventStories.map((story) => (
+                        <div key={story?.id} className="w-[100px]">
                           <img
                             src={
-                              stories?.thumbnail.path +
+                              story?.thumbnail.path +
                               "." +
-                              stories?.thumbnail.extension
+                              story?.thumbnail.extension
                             }
                             className="object-cover w-[100px] h-[154px] rounded-lg border cursor-pointer transition-all hover:scale-105"
                             loading="lazy"
-                            alt={stories.title}
+                            alt={story.title}
                             onClick={() =>
                               openLightbox(
-                                stories?.thumbnail.path +
+                                story?.thumbnail.path +
                                   "." +
-                                  stories?.thumbnail.extension
+                                  story?.thumbnail.extension
                               )
                             }
                           />
                           <span className="line-clamp-1 text-xs">
-                            {stories?.title}
+                            {story?.title}
                           </span>
                         </div>
                       ))}
@@ -215,4 +213,4 @@ const CharacterDetail = () => {
   );
 };
 
-export default CharacterDetail;
+export default EventDetail;

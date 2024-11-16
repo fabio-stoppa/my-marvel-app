@@ -1,44 +1,48 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ShieldSVG from "@/assets/Captain_America_Shield.svg";
+
+const savedEmail = localStorage.getItem("userEmail");
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const navigate = useNavigate();
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((prev) => !prev);
+  }, []);
 
   return (
-    <nav className="bg-gray-900 bg-opacity-75 shadow-md backdrop-blur-lg text-white py-2 px-10 fixed w-screen top-0 left-0 z-50">
-      <div className="container w-full flex justify-between items-center">
-        <div className="text-2xl font-bold flex gap-2 items-center">
-          <img
-            src={ShieldSVG}
-            alt="Marvelpedia"
-            className="aspect-square h-10"
-          />
-          <a href="#" className="hover:text-gray-400">
-            Marvelpedia
-          </a>
-        </div>
+    <nav className="bg-gray-900 bg-opacity-75 shadow-md backdrop-blur-lg text-white py-2 px-10 fixed w-screen top-0 left-0 z-50 flex justify-between">
+      <div className="text-2xl font-bold flex gap-2 items-center cursor-pointer">
+        <img
+          src={ShieldSVG}
+          alt="Marvelpedia"
+          className="aspect-square h-10"
+          onClick={() => navigate("/")}
+        />
+        <span onClick={() => navigate("/")} className="hover:text-gray-400">
+          Marvelpedia
+        </span>
+      </div>
 
-        {/* Desktop Navbar Links */}
+      {savedEmail && (
         <div className="hidden md:flex space-x-6">
-          <a href="#" className="hover:text-gray-400">
-            Home
-          </a>
-          <a href="#about" className="hover:text-gray-400">
-            About
-          </a>
-          <a href="#services" className="hover:text-gray-400">
-            Services
-          </a>
-          <a href="#contact" className="hover:text-gray-400">
-            Contact
-          </a>
+          <button
+            onClick={() => navigate("/characters")}
+            className="hover:text-gray-400 font-bold"
+          >
+            Characters
+          </button>
+          <button
+            onClick={() => navigate("/events")}
+            className="hover:text-gray-400 font-bold"
+          >
+            Events
+          </button>
         </div>
+      )}
 
-        {/* Mobile Hamburger Menu */}
+      {savedEmail && (
         <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}
@@ -48,23 +52,28 @@ const Navbar = () => {
             <span className="material-icons">menu</span>
           </button>
         </div>
-      </div>
+      )}
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-gray-800 text-white p-4 space-y-4">
-          <a href="#" className="block hover:text-gray-400">
-            Home
-          </a>
-          <a href="#about" className="block hover:text-gray-400">
-            About
-          </a>
-          <a href="#services" className="block hover:text-gray-400">
-            Services
-          </a>
-          <a href="#contact" className="block hover:text-gray-400">
-            Contact
-          </a>
+      {isMobileMenuOpen && savedEmail && (
+        <div className="md:hidden rounded-b-md bg-gray-900  shadow-md fixed top-14 right-9 text-white p-4 space-y-4 z-50 ">
+          <button
+            onClick={() => {
+              toggleMobileMenu();
+              navigate("/characters");
+            }}
+            className="block hover:text-gray-400 p-2 font-bold"
+          >
+            Characters
+          </button>
+          <button
+            onClick={() => {
+              toggleMobileMenu();
+              navigate("/events");
+            }}
+            className="block hover:text-gray-400 p-2 font-bold"
+          >
+            Events
+          </button>
         </div>
       )}
     </nav>

@@ -1,12 +1,20 @@
 import { ComicResponse } from "@/types/comics";
 import { marvelApi, generateAuthParams } from "./marvelApi";
 
-export const getComics = async (
-  titleStartsWith?: string
-): Promise<ComicResponse> => {
+export const getComics = async ({
+  nameStartsWith,
+  offset,
+  limit,
+}: {
+  nameStartsWith?: string;
+  offset: number;
+  limit: number;
+}): Promise<ComicResponse> => {
   const params = {
     ...generateAuthParams(),
-    titleStartsWith,
+    titleStartsWith: nameStartsWith,
+    offset,
+    limit,
   };
 
   try {

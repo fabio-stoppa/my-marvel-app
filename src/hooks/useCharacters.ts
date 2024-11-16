@@ -1,11 +1,10 @@
-// useCharacters.ts
 import useSWRInfinite from "swr/infinite";
 import { getCharacters } from "@/api/getCharacters";
 import { Character } from "@/types/characters";
 
 export interface Filter {
   text: string;
-  type: "character" | "comics" | "series" | "events";
+  type: "characters" | "comics" | "series" | "events";
 }
 
 export const PAGE_SIZE = 24;
@@ -24,8 +23,10 @@ export const useCharacters = (filter?: Filter) => {
     getCharacters,
     {
       revalidateOnFocus: false,
+      revalidateOnReconnect: false,
       revalidateFirstPage: false,
       keepPreviousData: true,
+      dedupingInterval: 2000,
     }
   );
 };
