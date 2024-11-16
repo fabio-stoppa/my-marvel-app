@@ -1,34 +1,19 @@
 import MarvelBackgrond from "@/assets/marvel-background-web.webp";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDebounce } from "use-debounce";
+import { ClipLoader } from "react-spinners";
 import { Filter, PAGE_SIZE, useCharacters } from "../hooks/useCharacters";
 import CharacterDetail from "./CharacterDetails";
-import { Input } from "./ui/input";
+import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-
-const SkeletonCard = () => {
-  return (
-    <div className="border rounded-lg flex-col flex text-center shadow-md hover:shadow-lg transition-shadow overflow-hidden animate-pulse bg-gray-900 h-[300px]">
-      <div className="w-full h-[40%] bg-gray-800 rounded-t-md"></div>
-      <div className="text-xs text-left text-gray-400 flex gap-4 justify-center -mt-7 z-10">
-        <div className="rounded-full bg-gray-600 w-14 h-14" />
-        <div className="rounded-full bg-gray-600 w-14 h-14" />
-        <div className="rounded-full bg-gray-600 w-14 h-14" />
-      </div>
-      <div className="p-4 flex flex-col gap-2 w-30">
-        <div className="w-24 h-4 bg-gray-600 rounded mb-2"></div>
-        <div className="w-32 h-3 bg-gray-600 rounded"></div>
-      </div>
-    </div>
-  );
-};
+} from "./ui/Select";
+import SkeletonCard from "./ui/SkeletonCard";
 
 const CharactersList = () => {
   const navigate = useNavigate();
@@ -36,29 +21,42 @@ const CharactersList = () => {
     text: "",
     type: "character",
   });
-  const [debouncedFilter] = useDebounce(filter, 1000);
-  const { data, error, size, setSize, isValidating } =
-    useCharacters(debouncedFilter);
+  const [appliedFilter, setAppliedFilter] = useState<Filter>({
+    text: "",
+    type: "character",
+  });
+  const { data, error, size, setSize, isValidating, isLoading } =
+    useCharacters(appliedFilter);
   const loaderRef = useRef<HTMLDivElement | null>(null);
   const { id } = useParams();
+  const allCharacters = useMemo(() => {
+    return data?.flatMap((page) => page.characters) || [];
+  }, [data]);
 
+  const totalResults = useMemo(() => {
+    return data?.[0]?.total || 0;
+  }, [data]);
+
+  const displayedCharacters = useMemo(() => allCharacters, [allCharacters]);
+
+  const isEmptyPage = useMemo(() => {
+    return displayedCharacters.length === 0 && isValidating;
+  }, [displayedCharacters, isValidating]);
   useEffect(() => {
     const loadMoreItems = () => {
-      if (!isValidating) {
+      if (!isValidating && displayedCharacters.length < totalResults) {
         setSize(size + 1);
       }
     };
-    const loaderElement = loaderRef.current;
 
+    const loaderElement = loaderRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !isValidating) {
           loadMoreItems();
         }
       },
-      {
-        rootMargin: "300px",
-      }
+      { rootMargin: "300px" } // You can adjust the rootMargin based on your needs
     );
 
     if (loaderElement) {
@@ -70,14 +68,9 @@ const CharactersList = () => {
         observer.unobserve(loaderElement);
       }
     };
-  }, [isValidating, setSize, size]);
+  }, [isValidating, displayedCharacters.length, totalResults, size, setSize]);
 
   if (error) return <div>Error loading characters: {error.message}</div>;
-
-  const allCharacters = data?.flatMap((page) => page.characters) || [];
-  const totalResults = data?.[0]?.total || 0;
-  const displayedCharacters = allCharacters;
-  const isEmptyPage = displayedCharacters.length === 0 && isValidating;
 
   return (
     <>
@@ -91,12 +84,14 @@ const CharactersList = () => {
           }
           placeholder="Filter by..."
           className="w-[180px] bg-black"
+          disabled={isLoading}
         />
         <Select
           onValueChange={(value: Filter["type"]) =>
             setFilter((prev) => ({ ...prev, type: value }))
           }
           value={filter.type}
+          disabled={isLoading}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="filter" />
@@ -104,17 +99,27 @@ const CharactersList = () => {
           <SelectContent>
             <SelectItem value="character">Character</SelectItem>
             <SelectItem value="comics">Comics</SelectItem>
-            <SelectItem value="stories">Stories</SelectItem>
             <SelectItem value="series">Series</SelectItem>
-            <SelectItem value="series">Events</SelectItem>
+            <SelectItem value="events">Events</SelectItem>
           </SelectContent>
         </Select>
+        <Button
+          disabled={!filter.text || isLoading}
+          onClick={() => setAppliedFilter(filter)}
+          className="w-20"
+        >
+          {isLoading ? (
+            <ClipLoader size="1em" color={"black"} loading={true} />
+          ) : (
+            "Filter"
+          )}
+        </Button>
         <span className="font-semibold whitespace-nowrap">
           Results: {totalResults}
         </span>
       </div>
       <div
-        className="p-10 bg-gray-950 relative"
+        className="p-10 bg-gray-950 relative h-full"
         style={{
           background: `linear-gradient(to bottom, rgb(3 7 18 / 10%) 0, rgb(3 7 18 / 100%) 500px), url('${MarvelBackgrond}')`,
           backgroundPosition: "top",
@@ -127,48 +132,51 @@ const CharactersList = () => {
           <p className="text-gray-300 max-w-[800px]">
             Explore the epic world of Marvel, from Iron Man and Spider-Man to
             Thor and Deadpool! Heroes, villains, and cosmic forces await you.
-            Looking for someone specific? Use the <b>search bar</b> or{" "}
-            <b>filters</b> above to easily find your favorite character
+            Looking for someone specific? Use the <b>filters</b> below to easily
+            find your favorite character
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 auto-rows-fr">
-          {isEmptyPage
-            ? Array.from({ length: PAGE_SIZE }).map((_, index) => (
-                <SkeletonCard key={index} />
-              ))
-            : displayedCharacters.map((character) => (
-                <div
-                  key={character.id}
-                  onClick={() => navigate(`/characters/${character.id}`)}
-                  className="border rounded-lg flex-col flex text-center shadow-md hover:shadow-lg transition-all overflow-hidden bg-gray-900 cursor-pointer hover:scale-105 h-[300px]"
-                >
-                  <img
-                    src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                    alt={character.name}
-                    className="w-full h-[40%] object-cover brightness-90"
-                  />
-                  <div className="text-xs text-left text-gray-400 flex gap-4 justify-center -mt-7 z-10">
-                    <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
-                      <div>{character.comics.available}</div> <div>comics</div>
-                    </div>
-                    <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
-                      <div>{character.stories.available}</div>{" "}
-                      <div>stories</div>
-                    </div>
-                    <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
-                      <div>{character.series.available}</div> <div>series</div>
-                    </div>
+          {isEmptyPage ? (
+            Array.from({ length: PAGE_SIZE }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))
+          ) : displayedCharacters.length === 0 ? (
+            <div className="w-full text-center">No results</div>
+          ) : (
+            displayedCharacters.map((character) => (
+              <div
+                key={character.id}
+                onClick={() => navigate(`/characters/${character.id}`)}
+                className="border rounded-lg flex-col flex text-center shadow-md hover:shadow-lg transition-all overflow-hidden bg-gray-900 cursor-pointer hover:scale-105 h-[300px]"
+              >
+                <img
+                  src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+                  alt={character.name}
+                  className="w-full h-[40%] object-cover brightness-90"
+                />
+                <div className="text-xs text-left text-gray-400 flex gap-4 justify-center -mt-7 z-10">
+                  <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
+                    <div>{character.comics.available}</div> <div>comics</div>
                   </div>
-                  <div className="px-4 pt-2 flex flex-col gap-2 w-30">
-                    <h3 className="text-md text-left font-medium line-clamp-1">
-                      {character.name}
-                    </h3>
-                    <p className="text-sm text-left text-gray-600 line-clamp-5">
-                      {character.description || "No description available"}
-                    </p>
+                  <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
+                    <div>{character.stories.available}</div> <div>stories</div>
+                  </div>
+                  <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
+                    <div>{character.series.available}</div> <div>series</div>
                   </div>
                 </div>
-              ))}
+                <div className="px-4 pt-2 flex flex-col gap-2 w-30">
+                  <h3 className="text-md text-left font-medium line-clamp-1">
+                    {character.name}
+                  </h3>
+                  <p className="text-sm text-left text-gray-600 line-clamp-5">
+                    {character.description || "No description available"}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
           {isValidating &&
             Array.from({ length: PAGE_SIZE }).map((_, index) => (
               <SkeletonCard key={index} />

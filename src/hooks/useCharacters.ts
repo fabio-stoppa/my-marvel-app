@@ -1,11 +1,11 @@
 // useCharacters.ts
 import useSWRInfinite from "swr/infinite";
 import { getCharacters } from "@/api/getCharacters";
-import { Character } from "@/types/marvel";
+import { Character } from "@/types/characters";
 
 export interface Filter {
   text: string;
-  type: "character" | "comics" | "stories" | "series" | "events";
+  type: "character" | "comics" | "series" | "events";
 }
 
 export const PAGE_SIZE = 24;

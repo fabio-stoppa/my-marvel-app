@@ -1,7 +1,7 @@
 // useCharacterById.ts
 import { useState, useEffect } from "react";
 import { fetchCharacterById } from "@/api/getCharacters";
-import { Character } from "@/types/marvel";
+import { Character } from "@/types/characters";
 
 export const useCharacterById = (id?: string) => {
   const [character, setCharacter] = useState<Character | null>(null);
