@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { useCharacters } from "./hooks/useCharacters";
+import { useCharacters } from "../hooks/useCharacters";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import {

@@ -1,14 +1,18 @@
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import CharacterSearch from "./components/CharactersList";
+import Navbar from "./components/Navbar";
 import { ThemeProvider } from "./components/ThemeProvider";
-import CharacterSearch from "./components/CharacterSearch";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
-  const queryClient = new QueryClient();
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <QueryClientProvider client={queryClient}>
-        <CharacterSearch />
-      </QueryClientProvider>
+      <Router>
+        <Navbar />
+
+        <Routes>
+          <Route path="/characters/:id?" element={<CharacterSearch />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }
