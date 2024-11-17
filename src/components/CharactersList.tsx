@@ -84,7 +84,7 @@ const CharactersList = () => {
 
   return (
     <>
-      <div className="flex items-center gap-6  py-4 px-4 fixed left-1/2 bottom-10 z-50 bg-black bg-opacity-50 shadow-md backdrop-blur-lg rounded-md translate-x-[-50%]">
+      <div className="flex flex-wrap justify-center w-full max-w-2xl  items-center gap-6 py-4 px-4 fixed left-1/2 md:bottom-6 bottom-0  z-50 bg-black bg-opacity-50 shadow-md backdrop-blur-lg rounded-md translate-x-[-50%]">
         <Input
           id="filter"
           type="text"
@@ -94,7 +94,7 @@ const CharactersList = () => {
           }
           onKeyDown={handleKeyDown}
           placeholder="Filter by..."
-          className="w-[180px] bg-black"
+          className="bg-black md:w-48"
           disabled={isLoading}
         />
         <Select
@@ -104,7 +104,7 @@ const CharactersList = () => {
           value={filter.type}
           disabled={isLoading}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="bg-black md:w-48">
             <SelectValue placeholder="filter" />
           </SelectTrigger>
           <SelectContent>
@@ -117,7 +117,7 @@ const CharactersList = () => {
         <Button
           disabled={!filter.text || isLoading}
           onClick={() => setAppliedFilter(filter)}
-          className="w-20"
+          className="md:w-20 w-full"
         >
           {isLoading ? (
             <ClipLoader size="1em" color={"black"} loading={true} />
@@ -125,7 +125,7 @@ const CharactersList = () => {
             "Filter"
           )}
         </Button>
-        <span className="font-semibold whitespace-nowrap">
+        <span className="font-semibold whitespace-nowrap hidden md:block">
           Results: {totalResults}
         </span>
       </div>
