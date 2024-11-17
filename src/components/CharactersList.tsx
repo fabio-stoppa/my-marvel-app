@@ -157,33 +157,33 @@ const CharactersList = () => {
           ) : (
             displayedCharacters.map((character) => (
               <div
-                key={character.id}
-                onClick={() => navigate(`/characters/${character.id}`)}
+                key={character?.id}
+                onClick={() => navigate(`/characters/${character?.id}`)}
                 className="border rounded-lg flex-col flex text-center shadow-md hover:shadow-lg transition-all overflow-hidden bg-gray-900 cursor-pointer hover:scale-105 h-[300px]"
               >
                 <img
-                  src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                  alt={character.name}
+                  src={`${character?.thumbnail.path}.${character?.thumbnail?.extension}`}
+                  alt={character?.name}
                   className="w-full h-[40%] object-cover brightness-90"
                   loading="lazy"
                 />
                 <div className="text-xs text-left text-gray-400 flex gap-4 justify-center -mt-7 z-10">
                   <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
-                    <div>{character.comics.available}</div> <div>comics</div>
+                    <div>{character?.comics.available}</div> <div>comics</div>
                   </div>
                   <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
-                    <div>{character.stories.available}</div> <div>stories</div>
+                    <div>{character?.stories.available}</div> <div>stories</div>
                   </div>
                   <div className="rounded-full flex flex-col bg-gray-700 font-medium text-gray-400 w-fit px-2 py-1 aspect-square items-center justify-center h-14">
-                    <div>{character.series.available}</div> <div>series</div>
+                    <div>{character?.series.available}</div> <div>series</div>
                   </div>
                 </div>
                 <div className="px-4 pt-2 flex flex-col gap-2 w-30">
                   <h3 className="text-md text-left font-medium line-clamp-1">
-                    {character.name}
+                    {character?.name}
                   </h3>
                   <p className="text-sm text-left text-gray-600 line-clamp-5">
-                    {character.description || "No description available"}
+                    {character?.description || "No description available"}
                   </p>
                 </div>
               </div>

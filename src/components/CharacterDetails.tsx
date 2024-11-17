@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Lightbox from "./ui/Lightbox";
 import ShieldSpinner from "./ui/Spinner";
+import noImage from "@/assets/no-image.svg";
 
 const CharacterDetail = () => {
   const navigate = useNavigate();
@@ -81,22 +82,28 @@ const CharacterDetail = () => {
                       Comics ({data.character.comics.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
-                      {data.charComics.map((comic) => (
+                      {data.charComics?.map((comic) => (
                         <div key={comic?.id} className="w-[100px]">
                           <img
                             src={
-                              comic?.thumbnail.path +
-                              "." +
-                              comic?.thumbnail.extension
-                            }
-                            className="object-cover w-[100px] h-[154px] rounded-lg border cursor-pointer transition-all hover:scale-105"
-                            loading="lazy"
-                            alt={comic.title}
-                            onClick={() =>
-                              openLightbox(
-                                comic?.thumbnail.path +
+                              comic.thumbnail
+                                ? comic.thumbnail.path +
                                   "." +
-                                  comic?.thumbnail.extension
+                                  comic.thumbnail.extension
+                                : noImage
+                            }
+                            className="object-cover w-[100px] h-[154px] rounded-lg border transition-all hover:scale-105"
+                            style={{
+                              cursor: comic.thumbnail ? "pointer" : "default",
+                            }}
+                            loading="lazy"
+                            alt={comic?.title}
+                            onClick={() =>
+                              comic.thumbnail &&
+                              openLightbox(
+                                comic?.thumbnail?.path +
+                                  "." +
+                                  comic?.thumbnail?.extension
                               )
                             }
                           />
@@ -112,22 +119,28 @@ const CharacterDetail = () => {
                       Events ({data.character.comics.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
-                      {data.charSeries.map((event) => (
+                      {data.charSeries?.map((event) => (
                         <div key={event?.id} className="w-[100px]">
                           <img
                             src={
-                              event?.thumbnail.path +
-                              "." +
-                              event?.thumbnail.extension
-                            }
-                            className="object-cover w-[100px] h-[154px] rounded-lg border cursor-pointer transition-all hover:scale-105"
-                            loading="lazy"
-                            alt={event.title}
-                            onClick={() =>
-                              openLightbox(
-                                event?.thumbnail.path +
+                              event.thumbnail
+                                ? event.thumbnail.path +
                                   "." +
-                                  event?.thumbnail.extension
+                                  event.thumbnail.extension
+                                : noImage
+                            }
+                            className="object-cover w-[100px] h-[154px] rounded-lg border transition-all hover:scale-105"
+                            style={{
+                              cursor: event.thumbnail ? "pointer" : "default",
+                            }}
+                            loading="lazy"
+                            alt={event?.title}
+                            onClick={() =>
+                              event.thumbnail &&
+                              openLightbox(
+                                event?.thumbnail?.path +
+                                  "." +
+                                  event?.thumbnail?.extension
                               )
                             }
                           />
@@ -143,22 +156,28 @@ const CharacterDetail = () => {
                       Series ({data.character.comics.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
-                      {data.charSeries.map((series) => (
+                      {data.charSeries?.map((series) => (
                         <div key={series?.id} className="w-[100px]">
                           <img
                             src={
-                              series?.thumbnail.path +
-                              "." +
-                              series?.thumbnail.extension
-                            }
-                            className="object-cover w-[100px] h-[154px] rounded-lg border cursor-pointer transition-all hover:scale-105"
-                            loading="lazy"
-                            alt={series.title}
-                            onClick={() =>
-                              openLightbox(
-                                series?.thumbnail.path +
+                              series.thumbnail
+                                ? series.thumbnail.path +
                                   "." +
-                                  series?.thumbnail.extension
+                                  series.thumbnail.extension
+                                : noImage
+                            }
+                            className="object-cover w-[100px] h-[154px] rounded-lg border transition-all hover:scale-105"
+                            style={{
+                              cursor: series.thumbnail ? "pointer" : "default",
+                            }}
+                            loading="lazy"
+                            alt={series?.title}
+                            onClick={() =>
+                              series.thumbnail &&
+                              openLightbox(
+                                series?.thumbnail?.path +
+                                  "." +
+                                  series?.thumbnail?.extension
                               )
                             }
                           />
@@ -174,27 +193,33 @@ const CharacterDetail = () => {
                       Stories ({data.character.comics.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
-                      {data.charStories.map((stories) => (
-                        <div key={stories?.id} className="w-[100px]">
+                      {data.charStories?.map((event) => (
+                        <div key={event?.id} className="w-[100px]">
                           <img
                             src={
-                              stories?.thumbnail.path +
-                              "." +
-                              stories?.thumbnail.extension
-                            }
-                            className="object-cover w-[100px] h-[154px] rounded-lg border cursor-pointer transition-all hover:scale-105"
-                            loading="lazy"
-                            alt={stories.title}
-                            onClick={() =>
-                              openLightbox(
-                                stories?.thumbnail.path +
+                              event.thumbnail
+                                ? event.thumbnail.path +
                                   "." +
-                                  stories?.thumbnail.extension
+                                  event.thumbnail.extension
+                                : noImage
+                            }
+                            className="object-cover w-[100px] h-[154px] rounded-lg border transition-all hover:scale-105"
+                            style={{
+                              cursor: event.thumbnail ? "pointer" : "default",
+                            }}
+                            loading="lazy"
+                            alt={event?.title}
+                            onClick={() =>
+                              event.thumbnail &&
+                              openLightbox(
+                                event?.thumbnail?.path +
+                                  "." +
+                                  event?.thumbnail?.extension
                               )
                             }
                           />
                           <span className="line-clamp-1 text-xs">
-                            {stories?.title}
+                            {event?.title}
                           </span>
                         </div>
                       ))}
