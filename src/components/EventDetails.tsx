@@ -74,7 +74,7 @@ const EventDetail = () => {
                 <p className="mt-2 text-gray-600 max-w-[800px]">
                   {data.event.description || "No description available."}
                 </p>
-                <div className="flex flex-col gap-4 justify-between mt-auto">
+                <div className="flex flex-col gap-10">
                   <div>
                     <h3 className="font-semibold mb-2">
                       Comics ({data.event.comics.available}):
