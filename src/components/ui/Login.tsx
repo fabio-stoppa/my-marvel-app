@@ -3,6 +3,7 @@ import { Input } from "./Input";
 import { Button } from "./Button";
 import MarvelBackgrond from "@/assets/marvel-background-web.webp";
 import MarvelLogo from "@/assets/marvel-logo.svg";
+import ShieldSVG from "@/assets/Captain_America_Shield.svg";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -48,7 +49,7 @@ const Login = () => {
 
   return (
     <div
-      className="login-container flex justify-center items-center h-screen bg-gray-900 text-white"
+      className="login-container flex justify-center items-center h-screen bg-gray-900 text-white transition-all"
       style={{
         background: `url('${MarvelBackgrond}')`,
         backgroundPosition: "top",
@@ -56,7 +57,14 @@ const Login = () => {
       }}
     >
       <div className="login-box p-10 rounded-lg shadow-lg bg-gray-900 w-[350px]">
-        <h2 className="text-2xl font-bold text-center">Login</h2>
+        <div className="text-4xl font-bold flex flex-col gap-2 items-center cursor-pointer justify-center">
+          <img
+            src={ShieldSVG}
+            alt="Marvelpedia"
+            className="aspect-square h-24"
+          />
+          <span className="hover:text-gray-400">Marvelpedia</span>
+        </div>
         <p className="text-gray-500 text-sm py-10">
           Welcome to Marvelpedia! Dive into the extraordinary world of heroes,
           villains, and epic tales. But first, let’s unlock your adventure —

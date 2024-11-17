@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ShieldSVG from "@/assets/Captain_America_Shield.svg";
 
 const savedEmail = localStorage.getItem("userEmail");
@@ -7,9 +7,13 @@ const savedEmail = localStorage.getItem("userEmail");
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current route
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);
   }, []);
+
+  // Function to check if the link is the current page
+  const isActiveLink = (path: string) => location.pathname === path;
 
   return (
     <nav className="bg-gray-900 bg-opacity-75 shadow-md backdrop-blur-lg text-white py-2 px-10 fixed w-screen top-0 left-0 z-50 flex justify-between">
@@ -29,13 +33,21 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-6">
           <button
             onClick={() => navigate("/characters")}
-            className="hover:text-gray-400 font-bold"
+            className={`font-bold ${
+              isActiveLink("/characters")
+                ? "text-yellow-400"
+                : "hover:text-gray-400"
+            }`}
           >
             Characters
           </button>
           <button
             onClick={() => navigate("/events")}
-            className="hover:text-gray-400 font-bold"
+            className={`font-bold ${
+              isActiveLink("/events")
+                ? "text-yellow-400"
+                : "hover:text-gray-400"
+            }`}
           >
             Events
           </button>
@@ -55,13 +67,17 @@ const Navbar = () => {
       )}
 
       {isMobileMenuOpen && savedEmail && (
-        <div className="md:hidden rounded-b-md bg-gray-900  shadow-md fixed top-14 right-9 text-white p-4 space-y-4 z-50 ">
+        <div className="md:hidden rounded-b-md bg-gray-900  shadow-md fixed top-14 right-9 text-white p-4 space-y-4 z-50">
           <button
             onClick={() => {
               toggleMobileMenu();
               navigate("/characters");
             }}
-            className="block hover:text-gray-400 p-2 font-bold"
+            className={`block p-2 font-bold ${
+              isActiveLink("/characters")
+                ? "text-yellow-400"
+                : "hover:text-gray-400"
+            }`}
           >
             Characters
           </button>
@@ -70,7 +86,11 @@ const Navbar = () => {
               toggleMobileMenu();
               navigate("/events");
             }}
-            className="block hover:text-gray-400 p-2 font-bold"
+            className={`block p-2 font-bold ${
+              isActiveLink("/events")
+                ? "text-yellow-400"
+                : "hover:text-gray-400"
+            }`}
           >
             Events
           </button>
