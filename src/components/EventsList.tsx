@@ -1,4 +1,4 @@
-import MarvelBackgrond from "@/assets/marvel-background-web.webp";
+import MarvelBackgrond2 from "@/assets/marvel-bg2.jpg";
 import { PAGE_SIZE, useEvents } from "@/hooks/useEvents";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -133,7 +133,7 @@ const CharactersList = () => {
       <div
         className="p-10 bg-gray-950 relative h-full"
         style={{
-          background: `linear-gradient(to bottom, rgb(3 7 18 / 10%) 0, rgb(3 7 18 / 100%) 500px), url('${MarvelBackgrond}')`,
+          background: `linear-gradient(to bottom, rgb(3 7 18 / 10%) 0, rgb(3 7 18 / 100%) 500px), url('${MarvelBackgrond2}')`,
           backgroundPosition: "top",
         }}
       >

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Input } from "./Input";
 import { Button } from "./Button";
 import MarvelBackgrond from "@/assets/marvel-background-web.webp";
+import MarvelLogo from "@/assets/marvel-logo.svg";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -115,7 +116,8 @@ const Login = () => {
         </div>
       </div>
 
-      <footer className="absolute bottom-0 left-0 right-0 p-10 bg-gray-950 text-center text-white">
+      <footer className="absolute bottom-0 left-0 right-0 p-10 bg-gray-950 flex justify-center items-center gap-10 text-white">
+        <img src={MarvelLogo} className="h-10" alt="Marvel Logo" />
         <p>
           &copy; {new Date().getFullYear()} Marvel Entertainment. All Rights
           Reserved.
