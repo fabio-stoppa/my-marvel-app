@@ -17,6 +17,8 @@ const CharacterDetail = () => {
     setIsLightboxOpen(true);
   }, []);
 
+  console.log(data);
+
   const closeLightbox = useCallback(() => {
     setIsLightboxOpen(false);
     setSelectedImage(null);
@@ -116,7 +118,7 @@ const CharacterDetail = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">
-                      Events ({data.character.comics.available}):
+                      Events ({data.character.events.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
                       {data.charSeries?.map((event) => (
@@ -153,7 +155,7 @@ const CharacterDetail = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">
-                      Series ({data.character.comics.available}):
+                      Series ({data.character.series.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
                       {data.charSeries?.map((series) => (
@@ -190,7 +192,7 @@ const CharacterDetail = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">
-                      Stories ({data.character.comics.available}):
+                      Stories ({data.character.stories.available}):
                     </h3>
                     <div className="flex flex-wrap gap-4">
                       {data.charStories?.map((event) => (

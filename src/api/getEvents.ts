@@ -31,7 +31,7 @@ export const getEvents = async ({
       const eventsResponse = await getCharacters({
         filter: filter,
         offset: 0,
-        limit: 100,
+        limit: 30,
       });
 
       const charIdsArr = eventsResponse.characters
@@ -52,7 +52,7 @@ export const getEvents = async ({
       const comicsResponse = await getComics({
         nameStartsWith: filter.text,
         offset: 0,
-        limit: 100,
+        limit: 30,
       });
       const comicIdsArr = comicsResponse.data.results
         .slice(0, 9)
@@ -72,7 +72,7 @@ export const getEvents = async ({
       const seriesResponse = await getSeries({
         nameStartsWith: filter.text,
         offset: 0,
-        limit: 100,
+        limit: 30,
       });
       const seriesIdsArr = seriesResponse.data.results
         .slice(0, 9)

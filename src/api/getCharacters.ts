@@ -30,7 +30,7 @@ export const getCharacters = async ({
       const comicsResponse = await getComics({
         nameStartsWith: filter.text,
         offset: 0,
-        limit: 100,
+        limit: 30,
       });
       const comicIdsArr = comicsResponse.data.results
         .slice(0, 9)
@@ -48,7 +48,7 @@ export const getCharacters = async ({
       const seriesResponse = await getSeries({
         nameStartsWith: filter.text,
         offset: 0,
-        limit: 100,
+        limit: 30,
       });
       const seriesIdsArr = seriesResponse.data.results
         .slice(0, 9)
@@ -66,7 +66,7 @@ export const getCharacters = async ({
       const eventsResponse = await getEvents({
         filter: filter,
         offset: 0,
-        limit: 100,
+        limit: 30,
       });
       const eventsIdsArr = eventsResponse.events
         .slice(0, 9)
@@ -172,7 +172,7 @@ export const fetchCharacterStories = async (id: string): Promise<Story[]> => {
 
   try {
     const response = await marvelApi.get<StoryResponse>(
-      `characters/${id}/events`,
+      `characters/${id}/stories`,
       {
         params,
       }
@@ -189,7 +189,7 @@ export const fetchCharacterSeries = async (id: string): Promise<Series[]> => {
 
   try {
     const response = await marvelApi.get<SeriesResponse>(
-      `characters/${id}/events`,
+      `characters/${id}/series`,
       {
         params,
       }
