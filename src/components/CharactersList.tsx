@@ -108,7 +108,7 @@ const CharactersList = () => {
             <SelectValue placeholder="filter" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="character">Character</SelectItem>
+            <SelectItem value="characters">Character</SelectItem>
             <SelectItem value="comics">Comics</SelectItem>
             <SelectItem value="series">Series</SelectItem>
             <SelectItem value="events">Events</SelectItem>

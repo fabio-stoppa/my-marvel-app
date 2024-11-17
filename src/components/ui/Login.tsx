@@ -4,6 +4,7 @@ import { Button } from "./Button";
 import MarvelBackgrond from "@/assets/marvel-background-web.webp";
 import MarvelLogo from "@/assets/marvel-logo.svg";
 import ShieldSVG from "@/assets/Captain_America_Shield.svg";
+import { toast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -42,7 +43,11 @@ const Login = () => {
       localStorage.setItem("userEmail", email);
       setLoading(false);
 
-      alert("Login successful!");
+      toast({
+        title: "Login sucessful",
+        description: "Welcome back!",
+      });
+      window.location.reload();
     },
     [email, password, validateEmail]
   );

@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import { ThemeProvider } from "./components/ThemeProvider";
 import Login from "./components/ui/Login";
 import EventsList from "./components/EventsList";
+import { Toaster } from "./components/ui/toaster";
 
 const savedEmail = localStorage.getItem("userEmail");
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
@@ -42,6 +43,7 @@ function App() {
             }
           />
         </Routes>
+        <Toaster />
       </Router>
     </ThemeProvider>
   );
