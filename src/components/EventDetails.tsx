@@ -1,4 +1,4 @@
-import { useEventById } from "@/hooks/useEventById"; // Use the event hook
+import { useEventById } from "@/hooks/useEventById";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Lightbox from "./ui/Lightbox";
@@ -8,7 +8,7 @@ import noImage from "@/assets/no-image.svg";
 const EventDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data, loading } = useEventById(id); // Fetch event data using the event hook
+  const { data, loading } = useEventById(id);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 

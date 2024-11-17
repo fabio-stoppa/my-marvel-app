@@ -7,12 +7,11 @@ const savedEmail = localStorage.getItem("userEmail");
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current route
+  const location = useLocation();
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);
   }, []);
 
-  // Function to check if the link is the current page
   const isActiveLink = (path: string) => location.pathname === path;
 
   return (
